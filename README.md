@@ -1,5 +1,5 @@
-KERNEL: new Erlang foundation
-=============================
+KERNEL: New Erlang Core
+=======================
 
 Features
 --------
