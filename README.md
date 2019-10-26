@@ -1,5 +1,5 @@
-KERNEL: New Erlang Core
-=======================
+RT: Erlang Runtime
+==================
 
 Features
 --------
