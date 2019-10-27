@@ -9,8 +9,6 @@ jobs:
       with:
         otp-version: 22.x
         elixir-version: 1.9.x
-    - name: CMake
-      run: sudo apt-get install -y cmake
     - name: Dependencies
       run: |
         mix local.rebar --force
