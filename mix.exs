@@ -18,7 +18,7 @@ defmodule RT.Mixfile do
       licenses: ["ISC"],
       maintainers: ["Namdak Tonpa"],
       name: :rt,
-      links: %{"GitHub" => "https://github.com/synrc/rt"}
+      links: %{"GitHub" => "https://github.com/voxoz/rt"}
     ]
   end
 
