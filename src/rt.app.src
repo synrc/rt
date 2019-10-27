@@ -1,0 +1,9 @@
+{application, rt,
+ [
+  {description, "RT Runtime"},
+  {vsn, "0.8.0"},
+  {registered, []},
+  {applications, [kernel,stdlib]},
+  {mod, { rt, []}},
+  {env, []}
+ ]}.
