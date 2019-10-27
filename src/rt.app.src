@@ -1,6 +1,6 @@
 {application, rt,
  [
-  {description, "RT Runtime"},
+  {description, "RT Erlang Runtime Library"},
   {vsn, "0.8.0"},
   {registered, []},
   {applications, [kernel,stdlib]},

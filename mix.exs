@@ -6,7 +6,7 @@ defmodule RT.Mixfile do
       app: :rt,
       version: "0.10.0",
       elixir: "~> 1.7",
-      description: "RT Erlang Runtime",
+      description: "RT Erlang Runtime Library",
       package: package(),
       deps: deps()
     ]

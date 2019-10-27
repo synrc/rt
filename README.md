@@ -1,5 +1,5 @@
-RT: Erlang Runtime
-==================
+RT: Erlang Runtime Library
+==========================
 
 [![Actions Status](https://github.com/voxoz/rt/workflows/mix/badge.svg)](https://github.com/voxoz/rt/actions)
 [![Hex pm](http://img.shields.io/hexpm/v/rt.svg?style=flat)](https://hex.pm/packages/rt)
