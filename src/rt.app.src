@@ -1,7 +1,7 @@
 {application, rt,
  [
   {description, "RT Erlang Runtime Library"},
-  {vsn, "0.8.0"},
+  {vsn, "0.11.0"},
   {registered, []},
   {applications, [kernel,stdlib]},
   {mod, { rt, []}},
