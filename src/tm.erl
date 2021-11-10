@@ -14,11 +14,11 @@ server(init, _, #pi{} = Async) ->
 server(ping, _, #pi{state = Timer} = Async) ->
     erlang:cancel_timer(Timer),
     io:format("PING "),
-    {noreply, Async#pi{state = timer_restart(ping())}};
+    {ok, Async#pi{state = timer_restart(ping())}};
 server(OK, _, #pi{state = Timer} = Async) ->
     erlang:cancel_timer(Timer),
     io:format("OK: ~p~n", [OK]),
-    {noreply, Async#pi{state = timer_restart(ping())}}.
+    {ok, Async#pi{state = timer_restart(ping())}}.
 
 timer_restart(Diff) ->
     {X, Y, Z} = Diff,
