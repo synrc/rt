@@ -1,6 +1,6 @@
 -module(srv).
 
--export([start_link/1, spawn_link/1, loop/4]).
+-export([start/1, loop/4]).
 
 -include_lib("rt/include/pi.hrl").
 
@@ -12,12 +12,12 @@ setup(Parent, App) ->
     process_flag(trap_exit, true),
     put('$ancestors', [Parent]).
 
-start_link(#pi{} = PI) ->
-    X = spawn(srv, spawn_link, [PI]),
+start(#pi{} = PI) ->
+    X = spawn(srv, setup_loop, [PI]),
     X ! {init, self(), []},
     X.
 
-spawn_link(#pi{parent = Parent, mod = Mod,
+setup_loop(#pi{parent = Parent, mod = Mod,
                name = Name, hibernate = Hibernate} =
                PI) ->
     setup(Parent, Name),
