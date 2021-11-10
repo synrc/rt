@@ -1,6 +1,6 @@
 -module(srv).
 
--export([start_link/1, spawn_link/1, hibernate/4]).
+-export([start_link/1, spawn_link/1, loop/4]).
 
 -include_lib("rt/include/pi.hrl").
 
@@ -23,21 +23,21 @@ spawn_link(#pi{parent = Parent, mod = Mod,
                name = Name, hibernate = Hibernate} =
                PI) ->
     emulate_otp(Parent, Name),
-    hiber_loop(Parent, {local, srv}, PI, Mod, Hibernate).
+    loop(Parent, {local, srv}, PI, Mod, Hibernate).
 
-hiber_loop(Parent, Name, State, Mod, hibernate) ->
-    erlang:hibernate(srv,
-                     hibernate,
+loop(Parent, Name, State, Mod, hibernate) ->
+    erlang:hibernate(?MODULE,
+                     ?FUNCTION_NAME,
                      [Parent, Name, State, Mod]);
-hiber_loop(Parent, Name, State, Mod, Time) ->
-    server_loop(drain(Time), Parent, Name, State, Mod).
+loop(Parent, Name, State, Mod, Time) ->
+    server_loop(loop(Time), Parent, Name, State, Mod).
 
-hibernate(Parent, Name, State, Mod) ->
-    server_loop(drain(), Parent, Name, State, Mod).
+loop(Parent, Name, State, Mod) ->
+    server_loop(loop(), Parent, Name, State, Mod).
 
-drain() -> receive Input -> Input end.
+loop() -> receive Input -> Input end.
 
-drain(Timeout) ->
+loop(Timeout) ->
     receive
         Input -> Input after Timeout -> {timeout, [], []}
     end.
@@ -68,16 +68,16 @@ dispatch(Call, Sender, Parent, Name, Mod) ->
     Time = infinity,
     case Call of
         {noreply, State} ->
-            hiber_loop(Parent, Name, State, Mod, Time);
+            loop(Parent, Name, State, Mod, Time);
         {stop, _, _} -> ok;
         {stop, Reply, F, _} ->
             reply(F, Reply),
             Reply;
         {ok, Reply, State} ->
             reply(Sender, Reply),
-            hiber_loop(Parent, Name, State, Mod, Time);
+            loop(Parent, Name, State, Mod, Time);
         {ok, State} ->
-            hiber_loop(Parent, Name, State, Mod, Time)
+            loop(Parent, Name, State, Mod, Time)
     end.
 
 call(Fun, Msg, Sender, State, Mod) ->
