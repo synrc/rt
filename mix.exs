@@ -4,7 +4,7 @@ defmodule RT.Mixfile do
   def project() do
     [
       app: :rt,
-      version: "0.10.0",
+      version: "0.11.0",
       elixir: "~> 1.7",
       description: "RT Erlang Runtime Library",
       package: package(),
@@ -14,11 +14,11 @@ defmodule RT.Mixfile do
 
   def package do
     [
-      files: ~w(doc src mix.exs LICENSE),
+      files: ~w(doc lib include src mix.exs LICENSE),
       licenses: ["ISC"],
       maintainers: ["Namdak Tonpa"],
       name: :rt,
-      links: %{"GitHub" => "https://github.com/voxoz/rt"}
+      links: %{"GitHub" => "https://github.com/synrc/rt"}
     ]
   end
 
