@@ -1,6 +1,5 @@
 language: erlang
 otp_release:
-  - 22.0
   - 23.0
 script:
   - "curl -fsSL https://raw.github.com/synrc/mad/master/mad > mad"
