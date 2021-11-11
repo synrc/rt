@@ -1,10 +1,8 @@
--module(tm).
+-module(heart).
 
 -include_lib("rt/include/pi.hrl").
 
--export([server/3, init/1]).
-
-init(_) -> {ok, #pi{}}.
+-export([server/3]).
 
 server(init, _, #pi{} = Async) ->
     Timer = timer_restart(ping()),
@@ -25,4 +23,4 @@ timer_restart(Diff) ->
                       self(),
                       ping).
 
-ping() -> application:get_env(n2o, timer, {0, 1, 0}).
+ping() -> application:get_env(rt, heart, {0, 1, 0}).
