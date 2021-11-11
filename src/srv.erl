@@ -28,10 +28,10 @@ loop(Parent, Name, State, Mod, hibernate) ->
                      ?FUNCTION_NAME,
                      [Parent, Name, State, Mod]);
 loop(Parent, Name, State, Mod, Time) ->
-    server_loop(loop(Time), Parent, Name, State, Mod).
+    server_loop(loop(Time), {Parent, Name, State, Mod}).
 
 loop(Parent, Name, State, Mod) ->
-    server_loop(loop(), Parent, Name, State, Mod).
+    server_loop(loop(), {Parent, Name, State, Mod}).
 
 loop() -> receive Input -> Input end.
 
@@ -49,27 +49,22 @@ call(Fun, Mod, Message, Sender, State) ->
             Mod:server(Fun, Sender, State)
     end.
 
-server_loop({Fun, Sender, Message}, Parent, Name, State,
-            Mod) ->
+server_loop({Fun, Sender, Message},
+            {Parent, _, State, Mod} = Attr) ->
     try dispatch(call(Fun, Mod, Message, Sender, State),
                  Sender,
-                 Parent,
-                 Name,
-                 Mod)
+                 Attr)
     catch
         Error:Reason:Stack ->
             Crash = {Error, Reason, Stack},
             Parent ! {crash, Crash},
+            Mod:terminate(Crash, Sender, State),
             io:format("Exception: ~p~n", [Crash])
     end;
-server_loop(Msg, Parent, Name, State, Mod) ->
-    server_loop({info, {self(), []}, Msg},
-                Parent,
-                Name,
-                State,
-                Mod).
+server_loop(Msg, Attr) ->
+    server_loop({info, {self(), []}, Msg}, Attr).
 
-dispatch(Call, Sender, Parent, Name, Mod) ->
+dispatch(Call, Sender, {Parent, Name, _, Mod}) ->
     Time = infinity,
     case Call of
         {stop, _, _} -> ok;
