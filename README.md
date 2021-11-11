@@ -7,13 +7,14 @@ RT: Erlang Runtime Library
 Features
 --------
 
-* Simple ETS supervisor system: App, Sup, Srv
-* Heartbeat protocol
-* Shell Executor
+* Ultra-compact `kernel` replacement for IoT applicances
+* NIF bindings for `ets`
+* Simple Supervision System: `app`, `sup`, `srv`
+* Heartbeat protocol `heart`
+* Shell Executor `sh`
 
 Credits
 -------
 
 * Alexey Nikitin
 * Maxim Sokhatsky
-
