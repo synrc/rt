@@ -143,10 +143,10 @@ update_element(_, _, _) -> erlang:nif_error(undef).
 whereis(_) -> erlang:nif_error(undef).
 
 match_delete(Table, Pattern) ->
-    ets:select_delete(Table, [{Pattern,[],[true]}]),
+    ets:select_delete(Table, [{Pattern, [], [true]}]),
     true.
 
-select_delete(Tab, [{'_',[],[true]}]) ->
+select_delete(Tab, [{'_', [], [true]}]) ->
     ets:internal_delete_all(Tab, undefined);
 select_delete(Tab, MatchSpec) ->
     ets:internal_select_delete(Tab, MatchSpec).
