@@ -4,8 +4,7 @@
 
 -export([server/3, init/1]).
 
-init(_) ->
-    {ok, #pi{}}.
+init(_) -> {ok, #pi{}}.
 
 server(init, _, #pi{} = Async) ->
     Timer = timer_restart(ping()),

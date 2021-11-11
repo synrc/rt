@@ -1,6 +1,6 @@
 -module(srv).
 
--export([start/1, loop/4]).
+-export([start/1, loop/4, setup_loop/1]).
 
 -include_lib("rt/include/pi.hrl").
 
@@ -17,8 +17,8 @@ start(#pi{} = PI) ->
     X ! {init, self(), []},
     X.
 
-setup_loop(#pi{parent = Parent, mod = Mod,
-               name = Name, hibernate = Hibernate} =
+setup_loop(#pi{parent = Parent, mod = Mod, name = Name,
+               hibernate = Hibernate} =
                PI) ->
     setup(Parent, Name),
     loop(Parent, {local, srv}, PI, Mod, Hibernate).
@@ -42,9 +42,16 @@ loop(Timeout) ->
 
 reply({To, Tag}, Reply) -> To ! {Tag, Reply}.
 
-server_loop({Fun, Sender, Msg}, Parent, Name, State,
+call(Fun, Mod, Message, Sender, State) ->
+    case Fun of
+        info -> Mod:server(Message, Sender, State);
+        X when X == init; X == terminate ->
+            Mod:server(Fun, Sender, State)
+    end.
+
+server_loop({Fun, Sender, Message}, Parent, Name, State,
             Mod) ->
-    try dispatch(Mod:server(Fun, Sender, State),
+    try dispatch(call(Fun, Mod, Message, Sender, State),
                  Sender,
                  Parent,
                  Name,
@@ -56,7 +63,11 @@ server_loop({Fun, Sender, Msg}, Parent, Name, State,
             io:format("Exception: ~p~n", [Crash])
     end;
 server_loop(Msg, Parent, Name, State, Mod) ->
-    server_loop({info, {self(), []}, Msg}, Parent, Name, State, Mod).
+    server_loop({info, {self(), []}, Msg},
+                Parent,
+                Name,
+                State,
+                Mod).
 
 dispatch(Call, Sender, Parent, Name, Mod) ->
     Time = infinity,
@@ -68,6 +79,5 @@ dispatch(Call, Sender, Parent, Name, Mod) ->
         {ok, Reply, State} ->
             reply(Sender, Reply),
             loop(Parent, Name, State, Mod, Time);
-        {ok, State} ->
-            loop(Parent, Name, State, Mod, Time)
+        {ok, State} -> loop(Parent, Name, State, Mod, Time)
     end.
